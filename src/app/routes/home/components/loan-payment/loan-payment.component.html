@@ -105,7 +105,8 @@
                   type="text"
                   formControlName="expirationDate"
                   id="expirationDate"
-                  placeholder="mm/dd/yyyy"
+                  placeholder="mm/yyyy"
+                  maxlength="7"
                   [attr.aria-invalid]="loanPaymentForm.get('expirationDate')?.invalid"
                 />
                 <app-error label="Expiration Date" [control]="loanPaymentForm.get('expirationDate')"> </app-error>

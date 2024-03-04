@@ -21,7 +21,7 @@ export class LoanPaymentComponent implements OnInit, OnDestroy {
     confirmBankAccountNumber: [null, [Validators.required, numbersOnlyValidator()]],
     // Debit Props
     cardNumber: [null, [Validators.required, numbersOnlyValidator()]],
-    nameOnCard: [null, [Validators.required, numbersOnlyValidator()]],
+    nameOnCard: [null, [Validators.required]],
     expirationDate: [null, [Validators.required]],
     cvv: [null, [Validators.required, numbersOnlyValidator(), Validators.maxLength(3), Validators.minLength(3)]],
   });
