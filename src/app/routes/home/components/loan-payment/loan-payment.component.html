@@ -1,0 +1,139 @@
+<div class="loan-payment-container container" role="form" *ngIf="{ isDebit: isDebit$ | async, apiState: svc.apiState$ | async } as comp">
+  <h1 id="formTitle">One-time Loan Payment</h1>
+  <p id="formDescription">Fill out the form below to complete your payment.</p>
+  <form [formGroup]="loanPaymentForm" (ngSubmit)="onSubmit()" novalidate>
+    <!--
+        API States
+    -->
+    <p-messages
+      *ngIf="comp.apiState?.success"
+      [value]="[{ severity: 'success', summary: 'Success', detail: 'Loan payment made successfully' }]"
+      [enableService]="false"
+      [closable]="false"
+    ></p-messages>
+    <p-messages
+      *ngIf="comp.apiState?.error"
+      [value]="[{ severity: 'error', summary: 'Error', detail: 'Error trying to make loan payment, please try again later' }]"
+      [enableService]="false"
+      [closable]="false"
+    ></p-messages>
+    <p-progressBar styleClass="mb-2" mode="indeterminate" [style]="{ height: '6px' }" *ngIf="comp.apiState?.waiting"></p-progressBar>
+
+    <!--
+        Form Field
+    -->
+    <div class="mb-3">
+      <div class="form-field">
+        <label for="loanAccountNumber">Loan Account Number</label>
+        <input type="text" formControlName="loanAccountNumber" id="loanAccountNumber" [attr.aria-invalid]="loanPaymentForm.get('loanAccountNumber')?.invalid" />
+        <app-error label="Loan Account Number" [control]="loanPaymentForm.get('loanAccountNumber')"> </app-error>
+      </div>
+      <div class="form-layout">
+        <div class="form-layout-fields">
+          <fieldset class="form-field">
+            <label for="loanAccountNumber">Type of Account:</label>
+            <div class="d-flex radio">
+              <label class="me-4"> <input type="radio" formControlName="accountType" value="Checking" /> Checking </label>
+              <label> <input type="radio" formControlName="accountType" value="DebitCard" /> Debit Card </label>
+            </div>
+            <app-error [control]="loanPaymentForm.get('accountType')"> </app-error>
+          </fieldset>
+
+          <!--
+            Checking
+          -->
+          <ng-container *ngIf="!comp.isDebit; else debit">
+            <div class="form-field">
+              <label for="routingNumber">Routing Number</label>
+              <input
+                type="text"
+                formControlName="routingNumber"
+                id="routingNumber"
+                maxlength="9"
+                [attr.aria-invalid]="loanPaymentForm.get('routingNumber')?.invalid"
+              />
+              <app-error label="Routing Number" [control]="loanPaymentForm.get('routingNumber')"> </app-error>
+            </div>
+
+            <div class="form-field">
+              <label for="bankAccountNumber">Bank Account Number</label>
+              <input
+                type="text"
+                formControlName="bankAccountNumber"
+                id="bankAccountNumber"
+                [attr.aria-invalid]="loanPaymentForm.get('bankAccountNumber')?.invalid"
+              />
+              <app-error label="Bank Account Number" [control]="loanPaymentForm.get('bankAccountNumber')"> </app-error>
+            </div>
+
+            <div class="form-field border-bottom">
+              <label for="confirmBankAccountNumber">Confirm Bank Account Number</label>
+              <input
+                type="text"
+                formControlName="confirmBankAccountNumber"
+                id="confirmBankAccountNumber"
+                [attr.aria-invalid]="loanPaymentForm.get('confirmBankAccountNumber')?.invalid"
+              />
+              <app-error
+                label="Confirm Bank Account Number"
+                [control]="loanPaymentForm.get('confirmBankAccountNumber')"
+                [showCustomError]="
+                  loanPaymentForm.get('bankAccountNumber')?.touched &&
+                  loanPaymentForm.get('confirmBankAccountNumber')?.touched &&
+                  loanPaymentForm.get('bankAccountNumber')?.value !== loanPaymentForm.get('confirmBankAccountNumber')?.value
+                "
+              >
+                Bank Account Numbers must match
+              </app-error>
+            </div>
+          </ng-container>
+          <ng-template #debit>
+            <div class="form-field">
+              <label for="cardNumber">Card Number</label>
+              <input type="text" formControlName="cardNumber" id="cardNumber" [attr.aria-invalid]="loanPaymentForm.get('cardNumber')?.invalid" />
+              <app-error label="Card Number" [control]="loanPaymentForm.get('cardNumber')"> </app-error>
+            </div>
+            <div class="form-field">
+              <label for="nameOnCard">Name On Card</label>
+              <input type="text" formControlName="nameOnCard" id="nameOnCard" [attr.aria-invalid]="loanPaymentForm.get('nameOnCard')?.invalid" />
+              <app-error label="Name On Card" [control]="loanPaymentForm.get('nameOnCard')"> </app-error>
+            </div>
+            <div class="debit-layout">
+              <div class="form-field w-50">
+                <label for="expirationDate">Expiration Date</label>
+                <input
+                  type="text"
+                  formControlName="expirationDate"
+                  id="expirationDate"
+                  placeholder="mm/dd/yyyy"
+                  [attr.aria-invalid]="loanPaymentForm.get('expirationDate')?.invalid"
+                />
+                <app-error label="Expiration Date" [control]="loanPaymentForm.get('expirationDate')"> </app-error>
+              </div>
+              <div class="form-field w-50">
+                <label for="cvv">CVV</label>
+                <input type="text" formControlName="cvv" id="cvv" maxlength="3" [attr.aria-invalid]="loanPaymentForm.get('cvv')?.invalid" />
+                <app-error label="CVV" [control]="loanPaymentForm.get('cvv')"> </app-error>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+        <div class="form-layout-image text-center">
+          <ng-container *ngIf="comp.isDebit; else credit">
+            <h3>Where can I find the CCV number?</h3>
+            <img src="assets/images/debit.png" alt="Example debit card with CCV" />
+          </ng-container>
+          <ng-template #credit>
+            <h3>
+              Where can I find the routing and<br />
+              account number?
+            </h3>
+            <img src="assets/images/check.png" alt="Example check with routing number and accout number" />
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="make-payment-btn" [disabled]="comp.apiState?.waiting" aria-labelledby="Submit the form to make a payment">MAKE PAYMENT</button>
+  </form>
+</div>

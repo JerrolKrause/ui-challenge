@@ -1,0 +1,11 @@
+<div class="error" *ngIf="control?.errors?.['required'] && control?.touched">{{ label }} is required</div>
+<div class="error" *ngIf="control?.errors?.['numbersOnly'] && control?.touched">Only numbers are allowed</div>
+<div class="error" *ngIf="control?.errors?.['minlength'] && control?.touched">
+  Please enter at least {{control?.errors?.['minlength']?.requiredLength}} numbers
+</div>
+<div class="error" *ngIf="control?.errors?.['maxlength'] && control?.touched">
+  Please enter a max of {{control?.errors?.['maxlength']?.requiredLength}} numbers
+</div>
+<div class="error" *ngIf="showCustomError">
+  <ng-content></ng-content>
+</div>

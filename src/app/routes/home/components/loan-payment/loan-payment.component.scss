@@ -1,0 +1,160 @@
+// Variables
+$formWidth: 768px; // Base form width for desktop
+$pad: 1rem; // Global padding
+$colorText: #606060; // Global text color
+$colWidth: 55%; // Left column width
+$borderColor: #d7dadd; // Global border color
+$interactiveColor: #00a39e; // Link/button colors
+$breakpoint: 768px; // Break from mobile to tablet/desktop
+
+// Component styling
+.loan-payment-container {
+  max-width: $formWidth;
+  margin: 0 auto;
+  font-family: 'Roboto', sans-serif;
+  color: #000;
+  background: #fff;
+
+  .debit-layout {
+    display: flex;
+    border-bottom: 1px solid $borderColor;
+    .form-field:last-child {
+      border-left: 0;
+    }
+  }
+
+  .form-field {
+    border: 1px solid $borderColor;
+    border-bottom: 0;
+    color: $colorText;
+    .border-bottom {
+      border-bottom: 1px solid $borderColor;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      padding: 0.5rem;
+      padding-bottom: 0;
+    }
+
+    .radio label {
+      font-size: 14px;
+      font-weight: initial;
+    }
+    input[type='number'],
+    input[type='text'] {
+      width: 100%;
+      padding: 8px;
+      font-size: 14px;
+      border: 0;
+      border-radius: 4px;
+
+      &:focus {
+        border-color: #66afe9;
+        outline: none;
+      }
+
+      &.is-invalid {
+        border-color: #dc3545;
+      }
+    }
+
+    .radio-buttons {
+      label {
+        font-size: 14px;
+        font-weight: normal;
+        margin-right: 16px;
+
+        input {
+          margin-right: 4px;
+        }
+      }
+    }
+
+    span {
+      display: block;
+      color: #dc3545;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+  }
+
+  .form-layout {
+    .form-layout-image {
+      padding: $pad;
+      border: 1px solid #d7dadd;
+      border-top-width: 0;
+      background: #f4f7fc;
+    }
+  }
+  // Desktop layout
+  @media (min-width: $breakpoint) {
+    .form-layout {
+      display: flex;
+      .form-layout-fields {
+        width: $colWidth;
+      }
+      .form-layout-image {
+        width: calc(100% - $colWidth);
+        border-left: 0;
+        border-top-width: 1px;
+      }
+    }
+  }
+
+  h1 {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 16px;
+    color: #000;
+  }
+  h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000;
+  }
+  h3 {
+    font-size: 14px;
+    font-weight: bold;
+    color: #000;
+  }
+  .formDescription {
+    color: #000;
+  }
+  img {
+    max-width: 100%; // Ensure images are responsive
+  }
+
+  p {
+    font-size: 16px;
+    margin-bottom: 24px;
+  }
+
+  .make-payment-btn {
+    padding: 12px;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #fff;
+    background-color: $interactiveColor;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    width: 100%;
+    @media (min-width: $breakpoint) {
+      width: 200px;
+    }
+
+    &:hover {
+      background-color: $interactiveColor;
+    }
+
+    &:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+  }
+}
